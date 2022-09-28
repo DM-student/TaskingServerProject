@@ -1,41 +1,44 @@
 package Tasking;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TaskManager
 {
+    // Хранятся просто объекты, а не объекты класса Task потому, что в любом случае придётся
+    // приведение совершать для получения доступа к полям и методам.
+    private Map<Integer, Object> tasks = new HashMap<>();
     private int lastId = 0;
-    private List<Object> tasks = new ArrayList<>();
-    public Object[] getTasks()
+
+    public void addTask(Task task)
     {
-            return tasks.toArray();
+        lastId++;
+        task.id = lastId;
+        tasks.put(lastId, task);
+    }
+    public void updateTask(int id, Object task) // Этот метод хоть и не используется, но он нужен по заданию.
+    {
+        if(tasks.get(id) != null) tasks.put(id, task);
+    }
+    public void removeTask(int id)
+    {
+        tasks.remove(id);
+    }
+    public void removeAllTasks()
+    {
+        tasks.clear();
+    }
+    public Object getTask(int id)
+    {
+        return tasks.get(id);
+    }
+    public Map getTasks()
+    {
+        return Map.copyOf(tasks);
     }
 
-    public void addTask(Object task)
+    public void printOut()
     {
-        if(task.getClass() != Task.class && task.getClass() != Epic.class)
-        {
-            throw new UncheckedIOException(new IOException("Object's class not supported. Expected Epic or Task, provided: "
-                    + task.getClass().getName()));
-        }
-        Task thatTask = (Task) task;
-        lastId++;
-        thatTask.id = lastId;
-        tasks.add(task);
-    }
-    public void removeTaskById(int id)
-    {
-        for(int i = 0; i < tasks.size(); i++)
-        {
-            Task task = (Task) tasks.get(i);
-            if(task.id == id) tasks.remove(i);
-        }
-    }
-    public void removeTaskByIndex(int index)
-    {
-        tasks.remove(index);
+
     }
 }

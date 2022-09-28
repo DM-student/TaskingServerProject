@@ -1,36 +1,24 @@
 package Tasking;
 
-public class Task {
-
+public class Task
+{
+    public Integer id;
+    public String state;
     public String name;
     public String description;
-    protected Integer id;
-    protected String state;
 
-    public int getId()
+    public Task(String state, String name, String description)
     {
-        return id;
+        this.state = state;
+        this.name = name;
+        this.description = description;
     }
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        if(state == "NEW" || state == "IN_PROGRESS" || state == "DONE")
-        {
-            this.state = state;
-        }
-    }
-
-    public Task()
-    {
-        state = "NEW";
-    }
+    public Task(){}
 
     @Override
     public String toString()
     {
-        return "task={id=" + id + ", name=\"" + name + "\", description=\""
-                + description + "\", state=\"" + state + "\"}";
+        return "Task{id=" + id + ", state=\"" +  state + "\", name=\""
+                + name + "\", description=\"" + description +"\"}";
     }
 }

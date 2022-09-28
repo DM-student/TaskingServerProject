@@ -1,36 +1,18 @@
 package Tasking;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 
 public class SubTask extends Task
 {
-    protected Epic owner;
-
-    public  Epic getOwner()
+    public EpicTask Owner;
+    public SubTask(String state, String name, String description)
     {
-        return owner;
+        this.state = state;
+        this.name = name;
+        this.description = description;
     }
-
-    @Override
-    public void setState(String state)
-    {
-        super.setState(state);
-        if(owner != null) owner.calculateState();
-    }
-    @Override
-    public int getId()
-    {
-        throw new UncheckedIOException(new IOException("Unable to getId of SubTask."));
-    }
-
-    public SubTask() {
-        super();
-    }
-
     @Override
     public String toString()
     {
-        return "subTask={name=\"" + name + "\", description=\""
-                + description + "\", state=\"" + state + "\"}";
+        return "SubTask{owner.id=" + Owner.id + ", state=\"" +  state + "\", name=\""
+                + name + "\", description=\"" + description +"\"}";
     }
 }
