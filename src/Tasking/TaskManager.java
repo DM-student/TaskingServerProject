@@ -1,7 +1,6 @@
 package Tasking;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TaskManager
 {
@@ -16,7 +15,8 @@ public class TaskManager
         task.id = lastId;
         tasks.put(lastId, task);
     }
-    public void updateTask(int id, Object task) // Этот метод хоть и не используется, но он нужен по заданию.
+    // Этот метод хоть и не используется, но он нужен по заданию.
+    public void updateTask(int id, Object task)
     {
         if(tasks.get(id) != null) tasks.put(id, task);
     }
@@ -36,9 +36,9 @@ public class TaskManager
     {
         return Map.copyOf(tasks);
     }
-
-    public void printOut()
+    // Аналогичная ситуация как и с updateTask.
+    public List<SubTask> getSubTasks(int id)
     {
-
+        return ((EpicTask) tasks.get(id)).subTasks;
     }
 }
