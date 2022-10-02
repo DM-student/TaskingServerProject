@@ -2,10 +2,37 @@ package Tasking;
 
 public class Task
 {
-    public Integer id;
-    public String state;
-    public String name;
-    public String description;
+    private Integer id;
+    private String state;
+    private String name;
+    private String description;
+
+
+
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public String getState() {
+        return state;
+    }
+    public void setState(String state) {
+        this.state = state;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Task(String state, String name, String description)
     {
@@ -13,7 +40,10 @@ public class Task
         this.name = name;
         this.description = description;
     }
-    public Task(){}
+
+    // Я возможно ошибаюсь, но пустой конструктор необходим, для создания кастомных конструкторов в подклассах.
+    // Как минимум IDEA не позволяет создать конструктор EpicTask без пустого или соответствующего конруктора у суперкласса.
+    public Task() {}
 
     @Override
     public String toString()

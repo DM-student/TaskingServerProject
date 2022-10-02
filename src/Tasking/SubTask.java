@@ -2,17 +2,30 @@ package Tasking;
 
 public class SubTask extends Task
 {
-    public EpicTask Owner;
+    private EpicTask owner;
+
     public SubTask(String state, String name, String description)
     {
-        this.state = state;
-        this.name = name;
-        this.description = description;
+        super(state, name, description);
     }
     @Override
     public String toString()
     {
-        return "SubTask{owner.id=" + Owner.id + ", state=\"" +  state + "\", name=\""
-                + name + "\", description=\"" + description +"\"}";
+        return "SubTask{id=" + getId() + ", state=\"" + getState() + "\", name=\""
+                + getName() + "\", description=\"" + getDescription() +"\"}";
     }
+    @Override
+    public void setState(String state)
+    {
+        super.setState(state);
+        if(owner != null) { owner.updateState(); }
+    }
+    public EpicTask getOwner() {
+        return owner;
+    }
+    public void setOwner(EpicTask owner) {
+        this.owner = owner;
+        if(owner != null) { owner.updateState(); }
+    }
+
 }

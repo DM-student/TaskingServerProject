@@ -1,60 +1,80 @@
 package Tasking;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-// Тут конечно много методов, которые не используются, но я их добавил для галочки,
-// иначе класс будет не очень функциональным.
 public class EpicTask extends Task
 {
-    public List<SubTask> subTasks = new ArrayList<>();
-
-    public void fixSubTasks()
+    private int lastSubTaskID;
+    private Map<Integer, SubTask> subTasks = new HashMap<>();
+    public SubTask getSubTask(int id)
     {
-        for(SubTask subTask : subTasks)
-        {
-            subTask.Owner = this;
-            subTask.id = null;
-        }
+        return subTasks.get(id);
+    }
+    public List<SubTask> getSubTasks()
+    {
+        return new ArrayList(subTasks.values());
+    }
+    public void addSubTask(SubTask subTask)
+    {
+        lastSubTaskID++;
+        subTasks.put(lastSubTaskID, subTask);
+        subTask.setOwner(this);
+        subTask.setId(lastSubTaskID);
+        updateState();
+    }
+    public void updateSubTask(int id, SubTask subTask)
+    {
+        if(subTasks.get(id) == null) {return;}
+        subTasks.put(id, subTask);
+        subTask.setOwner(this);
+        subTask.setId(id);
+        updateState();
+    }
+
+    public void removeSubTask(int id)
+    {
+        subTasks.remove(id);
         updateState();
     }
     public void updateState()
     {
-        boolean checkSuccess = true;
-        for(SubTask subTask : subTasks)
+        boolean CheckNewStatus = true;
+        for(SubTask subTask : subTasks.values())
         {
-            if(!subTask.state.equals("NEW")) checkSuccess=false;
+            if(!subTask.getState().equals("NEW")) { CheckNewStatus=false; }
         }
-        if (checkSuccess)
+        if (CheckNewStatus)
         {
-            state = "NEW";
+            setState("NEW");
             return;
         }
-        checkSuccess = true;
-        for(SubTask subTask : subTasks)
+        boolean CheckDoneStatus = true;
+        for(SubTask subTask : subTasks.values())
         {
-            if(!subTask.state.equals("DONE")) checkSuccess=false;
+            if(!subTask.getState().equals("DONE")) { CheckDoneStatus=false; }
         }
-        if (checkSuccess)
+        if (CheckDoneStatus)
         {
-            state = "DONE";
+            setState("DONE");
             return;
         }
-        state = "IN_PROGRESS";
+        setState("IN_PROGRESS");
     }
 
-    public EpicTask(String name, List<SubTask> subTasks)
+    public EpicTask(String name, Collection<SubTask> subTasks)
     {
-        this.name = name;
-        this.subTasks = subTasks;
-        fixSubTasks();
+        this.setName(name);
+        for(SubTask subTask : subTasks)
+        {
+            addSubTask(subTask);
+        }
+        updateState();
     }
-    public EpicTask(){}
 
     @Override
     public String toString()
     {
-        return "EpicTask{id=" + id + ", state=\"" +  state + "\", name=\""
-                + name + "\", subTasks=" + subTasks +"}";
+        return "EpicTask{id=" + getId() + ", state=\"" + getState() + "\", name=\""
+                + getName() + "\", subTasks=" + subTasks.values() +"}";
     }
 }
