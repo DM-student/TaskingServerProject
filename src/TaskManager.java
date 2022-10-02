@@ -13,9 +13,10 @@ public class TaskManager
         task.setId(lastId);
         tasks.put(lastId, task);
     }
-    public void updateTask(int id, Task task)
+    public void update(int id, Task task)
     {
         if(tasks.get(id) != null) { tasks.put(id, task); }
+        task.setId(id);
     }
     public void remove(int id)
     {
