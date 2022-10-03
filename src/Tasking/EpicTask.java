@@ -38,22 +38,22 @@ public class EpicTask extends Task
     }
     public void updateState()
     {
-        boolean CheckNewStatus = true;
+        boolean checkNewStatus = true;
         for(SubTask subTask : subTasks.values())
         {
-            if(!subTask.getState().equals("NEW")) { CheckNewStatus=false; }
+            if(!subTask.getState().equals("NEW")) { checkNewStatus=false; }
         }
-        if (CheckNewStatus)
+        if (checkNewStatus)
         {
             setState("NEW");
             return;
         }
-        boolean CheckDoneStatus = true;
+        boolean checkDoneStatus = true;
         for(SubTask subTask : subTasks.values())
         {
-            if(!subTask.getState().equals("DONE")) { CheckDoneStatus=false; }
+            if(!subTask.getState().equals("DONE")) { checkDoneStatus=false; }
         }
-        if (CheckDoneStatus)
+        if (checkDoneStatus)
         {
             setState("DONE");
             return;

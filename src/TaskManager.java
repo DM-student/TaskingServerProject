@@ -41,7 +41,7 @@ public class TaskManager
         {
             return ((EpicTask) tasks.get(id)).getSubTasks();
         }
-        else { return null; }
+        return null;
     }
     public Task getTask(int id)
     {
@@ -50,7 +50,7 @@ public class TaskManager
         {
             return tasks.get(id);
         }
-        else { return null; }
+        return null;
     }
     public EpicTask getEpicTask(int id)
     {
@@ -59,6 +59,6 @@ public class TaskManager
         {
             return (EpicTask) tasks.get(id);
         }
-        else { return null; }
+        return null;
     }
 }
