@@ -1,51 +1,65 @@
 import Tasking.*;
+import Tasking.Tasks.EpicTask;
+import Tasking.Tasks.SubTask;
+import Tasking.Tasks.Task;
+
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args)
     {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
-        Task task1 = new Task("IN_PROGRESS", "Допилить проект.", "Делай-делай ты проект, дурной.");
-        Task task2 = new Task("DONE", "Тратить время на глупые вещи.", "Как всегда в прочем.");
-        Collection<SubTask> subTasks1 = List.of(
-                new SubTask("DONE", "Подготовить лист", "Сделать первую часть."),
-                new SubTask("IN_PROGRESS", "Сделать часть кода", "Сделать вторую часть."),
-                new SubTask("NEW", "Сделать часть кода", "Сделать третью часть.")
-                );
-        Collection<SubTask> subTasks2 = List.of(
-                new SubTask("NEW", "Неполное задание", "Сделать NEW подзадачу."),
-                new SubTask("NEW", "Пустое задание", "Сделать NEW подзадачу."),
-                new SubTask("NEW", "Никакое задание", "Сделать NEW подзадачу.")
-        );
-        EpicTask epic1 = new EpicTask("Создать первый эпик.", subTasks1);
-        EpicTask epic2 = new EpicTask("Создать эпик под  удаление.", subTasks2);
+        for(int i = 0; i < 8; i++)
+        {
+            taskManager.addTask(new Task("Простая задача " + i, "Описание простой задачи" + i, State.NEW));
+        }
 
-        taskManager.add(task1);
-        taskManager.add(task2);
-        taskManager.add(epic1);
-        taskManager.add(epic2);
+        EpicTask epic1 = new EpicTask("Эпик 1");
 
-        printTasks(taskManager.getAll());
+        EpicTask epic2 = new EpicTask("Эпик 2");
 
-        taskManager.remove(4);
+        SubTask subTask1 = new SubTask("Типо подзадача 1", "Что-то в подзадаче", State.NEW);
+        SubTask subTask2 = new SubTask("Типо подзадача 2", "Что-то в подзадаче", State.NEW);
+        SubTask subTask3 = new SubTask("Типо подзадача 3", "Что-то в подзадаче", State.NEW);
 
-        taskManager.get(1).setState("DONE");
-        taskManager.getEpicTask(3).getSubTask(2).setState("DONE");
-        taskManager.getEpicTask(3).getSubTask(3).setState("DONE");
+        SubTask subTask4 = new SubTask("Типо подзадача 4", "Что-то в подзадаче", State.NEW);
+        SubTask subTask5 = new SubTask("Типо подзадача 1", "Что-то в подзадаче", State.DONE);
 
-        printTasks(taskManager.getAll());
+        epic1.listSubTasks().add(subTask1);
+        epic1.listSubTasks().add(subTask2);
+        epic1.listSubTasks().add(subTask3);
+        epic1.connectAllSubTasks();
 
+        epic2.listSubTasks().add(subTask4);
+        epic2.listSubTasks().add(subTask5);
+        epic2.connectAllSubTasks();
 
-        taskManager.removeAll();
+        taskManager.addTask(subTask1);
+        taskManager.addTask(subTask2);
+        taskManager.addTask(subTask3);
+        taskManager.addTask(subTask4);
+        taskManager.addTask(subTask5);
 
-        printTasks(taskManager.getAll());
-    }
+        taskManager.addTask(epic1);
+        taskManager.addTask(epic2);
 
-    static void printTasks(List tasks)
-    {
-        System.out.println("Все задачи в менеджере задач:");
-        for (Object task : tasks) System.out.println(task);
+        for(int i = 1; i < 21; i++)
+        {
+            taskManager.getSubTask(i);
+        }
+        for(int i = 1; i < 21; i++)
+        {
+            taskManager.getEpicTask(i);
+        }
+        for(int i = 1; i < 21; i++)
+        {
+            taskManager.getTask(i);
+        }
+
+        State checkState1 = epic1.getState();
+        State checkState2 = epic2.getState();
+        State checkState3 = (new EpicTask("Тестовый ЕпикТаск.")).getState();
     }
 }
