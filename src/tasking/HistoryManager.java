@@ -1,6 +1,6 @@
-package Tasking;
+package tasking;
 
-import Tasking.Tasks.*;
+import tasking.Tasks.*;
 
 import java.util.List;
 

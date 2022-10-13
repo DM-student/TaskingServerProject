@@ -1,4 +1,9 @@
-package Tasking;
+package tasking.managers;
+
+import tasking.HistoryManager;
+import tasking.InMemoryHistoryManager;
+import tasking.InMemoryTaskManager;
+import tasking.TaskManager;
 
 public class Managers {
     public static TaskManager getDefault()

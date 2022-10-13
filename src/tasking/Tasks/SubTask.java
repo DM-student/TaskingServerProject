@@ -1,6 +1,4 @@
-package Tasking.Tasks;
-
-import Tasking.State;
+package tasking.Tasks;
 
 public class SubTask extends Task
 {

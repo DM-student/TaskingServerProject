@@ -1,6 +1,4 @@
-package Tasking.Tasks;
-
-import Tasking.*;
+package tasking.Tasks;
 
 public class Task {
     private String name;

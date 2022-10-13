@@ -1,6 +1,4 @@
-package Tasking.Tasks;
-
-import Tasking.State;
+package tasking.Tasks;
 
 import java.util.*;
 

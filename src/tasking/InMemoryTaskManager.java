@@ -1,8 +1,9 @@
-package Tasking;
+package tasking;
 
-import Tasking.Tasks.EpicTask;
-import Tasking.Tasks.SubTask;
-import Tasking.Tasks.Task;
+import tasking.Tasks.EpicTask;
+import tasking.Tasks.SubTask;
+import tasking.Tasks.Task;
+import tasking.managers.Managers;
 
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int id) {
-        if(tasks.get(id) instanceof Task && tasks.get(id) != null)
+        if(tasks.get(id) != null && tasks.get(id) instanceof Task)
         {
             history.addToHistory(tasks.get(id));
             return tasks.get(id);
@@ -46,7 +47,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public SubTask getSubTask(int id) {
-        if(tasks.get(id) instanceof SubTask && tasks.get(id) != null)
+        if(tasks.get(id) != null && tasks.get(id) instanceof SubTask)
         {
             history.addToHistory(tasks.get(id));
             return (SubTask) tasks.get(id);
@@ -56,7 +57,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public EpicTask getEpicTask(int id) {
-        if(tasks.get(id) instanceof EpicTask && tasks.get(id) != null)
+        if(tasks.get(id) != null && tasks.get(id) instanceof EpicTask)
         {
             history.addToHistory(tasks.get(id));
             return (EpicTask) tasks.get(id);
@@ -65,8 +66,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map getTasks() {
-        return (Map) tasks.clone();
+    public List<Task> getTasks() {
+        return new ArrayList<Task>(tasks.values());
     }
 
     @Override

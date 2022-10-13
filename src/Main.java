@@ -1,9 +1,9 @@
-import Tasking.*;
-import Tasking.Tasks.EpicTask;
-import Tasking.Tasks.SubTask;
-import Tasking.Tasks.Task;
-
-import java.util.*;
+import tasking.*;
+import tasking.Tasks.EpicTask;
+import tasking.Tasks.State;
+import tasking.Tasks.SubTask;
+import tasking.Tasks.Task;
+import tasking.managers.Managers;
 
 public class Main {
 

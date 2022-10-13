@@ -1,9 +1,8 @@
-package Tasking;
+package tasking;
 
-import Tasking.Tasks.*;
+import tasking.Tasks.*;
 
 import java.util.List;
-import java.util.Map;
 
 public interface TaskManager
 {
@@ -14,6 +13,6 @@ public interface TaskManager
     Task getTask(int id);
     SubTask getSubTask(int id);
     EpicTask getEpicTask(int id);
-    Map getTasks();
+    List<Task> getTasks();
     List<Task> getHistory();
 }

@@ -1,4 +1,4 @@
-package Tasking;
+package tasking.Tasks;
 
 public enum State {
     NEW,
