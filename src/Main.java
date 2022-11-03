@@ -5,6 +5,8 @@ import tasking.Tasks.SubTask;
 import tasking.Tasks.Task;
 import tasking.managers.Managers;
 
+import java.util.*;
+
 public class Main {
 
     public static void main(String[] args)
@@ -57,6 +59,10 @@ public class Main {
         {
             taskManager.getTask(i);
         }
+
+        taskManager.removeAllTasks();
+
+        List<Task> history = taskManager.getHistory();
 
         State checkState1 = epic1.getState();
         State checkState2 = epic2.getState();
