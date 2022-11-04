@@ -1,4 +1,4 @@
-package tasking;
+package tasking.managers;
 
 import tasking.Tasks.*;
 

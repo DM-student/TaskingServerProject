@@ -6,7 +6,9 @@ public class CustomLinkedList<T> {
 
         public O item;
         private Node<O> nextNode;
-        private CustomLinkedList owner;
+
+        // Проверка владельца создана чтобы нельзя было попробовать удалить узел, которого нет в конкретном списке.
+        private CustomLinkedList<O> owner;
         private Node<O> lastNode;
 
         public Node<O> getNextNode() {
@@ -16,13 +18,13 @@ public class CustomLinkedList<T> {
         public Node<O> getLastNode() {
             return lastNode;
         }
-        public CustomLinkedList<T> getOwner() { return owner; }
+        public CustomLinkedList<O> getOwner() { return owner; }
     }
 
 
     private Node<T> firstNode;
     private Node<T> lastNode;
-    private int size;
+    private int size = 0;
 
     public Node<T> getFirstNode()
     {
@@ -59,7 +61,7 @@ public class CustomLinkedList<T> {
         return newNode;
     }
 
-    public void remove(Node target)
+    public void remove(Node<T> target)
     {
         if(target.owner != this) { return; }
         if(target == firstNode)
@@ -74,10 +76,5 @@ public class CustomLinkedList<T> {
         if(target.lastNode != null) {target.lastNode.nextNode = target.nextNode; }
         if(target.nextNode != null) {target.nextNode.lastNode = target.lastNode; }
         size--;
-    }
-
-    public CustomLinkedList()
-    {
-        size = 0;
     }
 }

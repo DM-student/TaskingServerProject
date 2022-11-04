@@ -1,9 +1,8 @@
-package tasking;
+package tasking.managers;
 
 import tasking.Tasks.EpicTask;
 import tasking.Tasks.SubTask;
 import tasking.Tasks.Task;
-import tasking.managers.Managers;
 
 import java.util.*;
 

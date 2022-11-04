@@ -1,9 +1,9 @@
-import tasking.*;
 import tasking.Tasks.EpicTask;
 import tasking.Tasks.State;
 import tasking.Tasks.SubTask;
 import tasking.Tasks.Task;
 import tasking.managers.Managers;
+import tasking.managers.TaskManager;
 
 import java.util.*;
 
@@ -60,7 +60,7 @@ public class Main {
             taskManager.getTask(i);
         }
 
-        taskManager.removeAllTasks();
+        taskManager.removeTask(2);
 
         List<Task> history = taskManager.getHistory();
 

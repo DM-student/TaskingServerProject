@@ -1,23 +1,22 @@
-package tasking;
+package tasking.managers;
 
 import java.util.*;
+
+import tasking.CustomLinkedList;
 import tasking.Tasks.*;
 
 public class InMemoryHistoryManager implements HistoryManager{
     private CustomLinkedList<Task> historyList = new CustomLinkedList<>();
     private Map<Integer, CustomLinkedList.Node> nodeMap = new HashMap<>();
 
-    public InMemoryHistoryManager() {
-    }
-
     @Override
     public List<Task> getHistory() {
         List<Task> history = new ArrayList<>();
-        CustomLinkedList.Node toAdd = historyList.getLastNode();
+        CustomLinkedList.Node toAdd = historyList.getFirstNode();
         for(int i = 0; i < historyList.getSize(); i++)
         {
             history.add((Task) toAdd.item);
-            toAdd = toAdd.getLastNode();
+            toAdd = toAdd.getNextNode();
         }
         return history;
     }
