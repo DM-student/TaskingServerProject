@@ -1,7 +1,7 @@
 package tasking;
 
 public class CustomLinkedList<T> {
-    public class Node<O>
+    public static class Node<O>
     {
 
         public O item;

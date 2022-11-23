@@ -2,6 +2,7 @@ import tasking.Tasks.EpicTask;
 import tasking.Tasks.State;
 import tasking.Tasks.SubTask;
 import tasking.Tasks.Task;
+import tasking.managers.FileBackedTasksManager;
 import tasking.managers.Managers;
 import tasking.managers.TaskManager;
 
@@ -11,7 +12,7 @@ public class Main {
 
     public static void main(String[] args)
     {
-        TaskManager taskManager = Managers.getDefault();
+        TaskManager taskManager = Managers.loadFromFile();
 
         for(int i = 0; i < 8; i++)
         {

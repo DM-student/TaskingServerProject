@@ -7,10 +7,8 @@ import tasking.Tasks.Task;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, Task> tasks = new HashMap<>();
     private HistoryManager history = Managers.getDefaultHistory();
-
-    private int lastId;
 
     @Override
     public void addTask(Task task) {
@@ -84,9 +82,22 @@ public class InMemoryTaskManager implements TaskManager {
         return history.getHistory();
     }
 
+    public HistoryManager getDeveloperHistoryManager()
+    {
+        return history;
+    }
+
     public int getNewId()
     {
-        lastId++;
-        return lastId;
+        int id = 1;
+        while (tasks.containsKey(id)) {
+            id++;
+        }
+        return id;
+    }
+
+    public void importTasks(Map<Integer, Task> tasks)
+    {
+        this.tasks = tasks;
     }
 }
