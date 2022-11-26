@@ -12,12 +12,12 @@ public class Managers {
         return new InMemoryHistoryManager();
     }
 
-    public static FileBackedTasksManager loadFromFile()
+    public static FileBackedTasksManager loadFromFile(File file)
     // Я не вижу смысла создавать аргумент для этого метода,
     // так как всё равно предрешено название и путь файла для сохранения и загрузки.
     {
         FileBackedTasksManager newManager = new FileBackedTasksManager();
-        newManager.load();
+        newManager.load(file);
         return newManager;
     }
 }

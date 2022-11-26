@@ -4,17 +4,19 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.*;
+import java.io.File;
 
 import tasking.Tasks.*;
 import tasking.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
+    public File saveFile = new File("save.txt"); // Тут дефолтный путь сохранения, который можно изменить.
 
-    public void load() {
+    public void load(File file) { // Я считал, что лучше будет оставить
         Map<Integer, Task> tasks = new HashMap<>();
         StringBuilder stringBuilder = new StringBuilder();
-        try (FileReader reader = new FileReader("save.txt")) {
+        try (FileReader reader = new FileReader(file)) {
             BufferedReader br = new BufferedReader(reader);
             while (br.ready()) {
                 stringBuilder.append(br.readLine());
@@ -23,7 +25,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1); // Нужно чтобы на конце \n убрать.
         String inputString = stringBuilder.toString();
 
         if(inputString.isEmpty())
@@ -31,13 +33,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             return;
         }
 
-        String tasksString = inputString.split("\n\n", - 1)[0];
+        String[] dataString = inputString.split("\n\n", - 1);
 
-        String[] tasksStrings = tasksString.split("\n");
+        String[] tasksStrings = dataString[0].split("\n");
 
         Map<Integer, Integer> subtasksAndEpics = new HashMap<>();
 
-        if(!tasksString.isEmpty()) {
+        if(!dataString[0].isEmpty()) {
 
             for (int i = 1; i < tasksStrings.length; i++) {
                 String[] taskStrings = tasksStrings[i].split(",", -1);
@@ -71,38 +73,42 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
         super.importTasks(tasks);
 
-        try {  //
-            String historyString = inputString.split("\n\n", -1)[1];
 
-            String[] historyStrings = historyString.split(",");
-            getDeveloperHistoryManager().clear();
-            for (int i = 0; i < historyStrings.length; i++) {
-                getDeveloperHistoryManager().addToHistory(tasks.get(Integer.parseInt(historyStrings[i])));
-            }
-        } catch (Throwable e) { }
+
+        if(dataString.length < 2 || dataString[1].isEmpty())
+        {
+            return;
+        }
+        String[] historyStrings = dataString[1].split(",");
+        getDeveloperHistoryManager().clear();
+        for (int i = 0; i < historyStrings.length; i++) {
+            getDeveloperHistoryManager().addToHistory(tasks.get(Integer.parseInt(historyStrings[i])));
+        }
     }
 
-    public void save()
+    public void save()  // Я решил сделать поле в которое можно указать путь,
+                        // а не аргумент, потому что иначе для изменения пути сохранения мне нужно будет менять путь
+                        // в каждом вызове метода сохранения.
     {
-        try(FileWriter writer = new FileWriter("save.txt", false))
+        try(FileWriter writer = new FileWriter(saveFile, false))
         {
             writer.write("id,type,name,status,description,owner");
 
             for(Task task : super.getTasks())
             {
                 writer.write("\n");
-                writer.write(UsefulStuff.antiNullPointerString(task.getId().toString()));
+                writer.write(UsefulStuff.returnEmptyIfNull(task.getId().toString()));
                 writer.write(",");
                 String[] classStrings = task.getClass().getName().split("\\.");
-                writer.write(UsefulStuff.antiNullPointerString(classStrings[classStrings.length - 1]));
+                writer.write(UsefulStuff.returnEmptyIfNull(classStrings[classStrings.length - 1]));
                 writer.write(",");
-                writer.write(UsefulStuff.antiNullPointerString(task.getName()));
+                writer.write(UsefulStuff.returnEmptyIfNull(task.getName()));
                 writer.write(",");
-                writer.write(UsefulStuff.antiNullPointerString(task.getState().name()));
+                writer.write(UsefulStuff.returnEmptyIfNull(task.getState().name()));
                 writer.write(",");
-                writer.write(UsefulStuff.antiNullPointerString(task.getDescription()));
+                writer.write(UsefulStuff.returnEmptyIfNull(task.getDescription()));
                 writer.write(",");
-                if(task.getClass() == SubTask.class)
+                if(task instanceof SubTask)
                 {
                     if(((SubTask) task).getOwner().getId() != null) {
                     writer.write(((SubTask) task).getOwner().getId().toString());
@@ -111,7 +117,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             }
 
             writer.write("\n");
-            writer.write("\n");
+            writer.write("\n"); // Два переноса нужно, чтобы отделить историю от объектов.
             StringBuilder str = new StringBuilder();
 
             for(Task task : super.getHistory())
@@ -175,16 +181,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public List<Task> getTasks() {
-        List<Task> buffer = super.getTasks();
-        save();
-        return buffer;
-    }
-
-    @Override
     public void importTasks(Map<Integer, Task> tasks)
     {
         super.importTasks(tasks);
-        save();
+        save(); // Тут сохранение нужно потому, что импортировать задачи могут и не только в случае
+                // загрузки из файла. Да и при загрузке используется метод суперкласса.
     }
 }

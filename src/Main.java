@@ -6,13 +6,14 @@ import tasking.managers.FileBackedTasksManager;
 import tasking.managers.Managers;
 import tasking.managers.TaskManager;
 
+import java.io.File;
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args)
     {
-        TaskManager taskManager = Managers.loadFromFile();
+        TaskManager taskManager = Managers.loadFromFile(new File("save.txt"));
 
         for(int i = 0; i < 8; i++)
         {

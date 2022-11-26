@@ -1,7 +1,7 @@
 package tasking;
 
 public class UsefulStuff {
-    public static String antiNullPointerString(String target)
+    public static String returnEmptyIfNull(String target)
     {
         if(target == null)
         {
