@@ -9,11 +9,12 @@ import java.io.File;
 import tasking.Tasks.*;
 import tasking.*;
 
+
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public File saveFile = new File("save.txt"); // Тут дефолтный путь сохранения, который можно изменить.
 
-    public void load(File file) { // Я считал, что лучше будет оставить
+    public static FileBackedTasksManager load(File file) { // Я считал, что лучше будет оставить
         Map<Integer, Task> tasks = new HashMap<>();
         StringBuilder stringBuilder = new StringBuilder();
         try (FileReader reader = new FileReader(file)) {
@@ -25,14 +26,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
+        if(stringBuilder.length() == 0)
+        {
+            return new FileBackedTasksManager(file);
+        }
         stringBuilder.deleteCharAt(stringBuilder.length() - 1); // Нужно чтобы на конце \n убрать.
         String inputString = stringBuilder.toString();
 
-        if(inputString.isEmpty())
-        {
-            return;
-        }
-
+        // Отрицательное число заставляет метод вернуть строку, даже если после разделителя пустота.
         String[] dataString = inputString.split("\n\n", - 1);
 
         String[] tasksStrings = dataString[0].split("\n");
@@ -71,19 +72,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             ((EpicTask) tasks.get(entry.getValue())).listSubTasks().add((SubTask) tasks.get(entry.getKey()));
             ((EpicTask) tasks.get(entry.getValue())).connectAllSubTasks();
         }
-        super.importTasks(tasks);
+
+        FileBackedTasksManager manager = new FileBackedTasksManager(file);
+
+        manager.importTasksWithoutSave(tasks);
 
 
 
         if(dataString.length < 2 || dataString[1].isEmpty())
         {
-            return;
+            return new FileBackedTasksManager(file);
         }
         String[] historyStrings = dataString[1].split(",");
-        getDeveloperHistoryManager().clear();
+        manager.getDeveloperHistoryManager().clear();
         for (int i = 0; i < historyStrings.length; i++) {
-            getDeveloperHistoryManager().addToHistory(tasks.get(Integer.parseInt(historyStrings[i])));
+            manager.getDeveloperHistoryManager().addToHistory(tasks.get(Integer.parseInt(historyStrings[i])));
         }
+        return manager;
     }
 
     public void save()  // Я решил сделать поле в которое можно указать путь,
@@ -96,17 +101,19 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
             for(Task task : super.getTasks())
             {
+                // Если будет null, то это вызовет ошибку, а это значение может быть например у эпиков,
+                // которые по хорошему не должны иметь описание
                 writer.write("\n");
-                writer.write(UsefulStuff.returnEmptyIfNull(task.getId().toString()));
+                writer.write(task.getId() == null ? "" : task.getId().toString());
                 writer.write(",");
                 String[] classStrings = task.getClass().getName().split("\\.");
-                writer.write(UsefulStuff.returnEmptyIfNull(classStrings[classStrings.length - 1]));
+                writer.write(classStrings[classStrings.length - 1]);
                 writer.write(",");
-                writer.write(UsefulStuff.returnEmptyIfNull(task.getName()));
+                writer.write(task.getName() == null ? "" : task.getName());
                 writer.write(",");
-                writer.write(UsefulStuff.returnEmptyIfNull(task.getState().name()));
+                writer.write(task.getState().name() == null ? "" : task.getState().name());
                 writer.write(",");
-                writer.write(UsefulStuff.returnEmptyIfNull(task.getDescription()));
+                writer.write(task.getDescription() == null ? "" : task.getDescription());
                 writer.write(",");
                 if(task instanceof SubTask)
                 {
@@ -133,7 +140,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         {
             throw new ManagerSaveException();
         }
-    }
+    } // Генератор айди не нужно сохранять, так как он переписан так, что может сам выбрать не занятый айди.
 
     @Override
     public void addTask(Task task) {
@@ -186,5 +193,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         super.importTasks(tasks);
         save(); // Тут сохранение нужно потому, что импортировать задачи могут и не только в случае
                 // загрузки из файла. Да и при загрузке используется метод суперкласса.
+    }
+
+    public void importTasksWithoutSave(Map<Integer, Task> tasks)
+    {
+        super.importTasks(tasks);
+    }
+
+    public FileBackedTasksManager(File file) {
+        saveFile = file;
     }
 }

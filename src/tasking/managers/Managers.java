@@ -16,8 +16,6 @@ public class Managers {
     // Я не вижу смысла создавать аргумент для этого метода,
     // так как всё равно предрешено название и путь файла для сохранения и загрузки.
     {
-        FileBackedTasksManager newManager = new FileBackedTasksManager();
-        newManager.load(file);
-        return newManager;
+        return FileBackedTasksManager.load(file);
     }
 }
