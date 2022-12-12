@@ -7,6 +7,7 @@ import tasking.managers.Managers;
 import tasking.managers.TaskManager;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Main {
@@ -27,6 +28,7 @@ public class Main {
         SubTask subTask1 = new SubTask("Типо подзадача 1", "Что-то в подзадаче", State.NEW);
         SubTask subTask2 = new SubTask("Типо подзадача 2", "Что-то в подзадаче", State.NEW);
         SubTask subTask3 = new SubTask("Типо подзадача 3", "Что-то в подзадаче", State.NEW);
+        subTask3.setStartTime(LocalDateTime.of(2022, 10, 3, 13, 20));
 
         SubTask subTask4 = new SubTask("Типо подзадача 4", "Что-то в подзадаче", State.NEW);
         SubTask subTask5 = new SubTask("Типо подзадача 1", "Что-то в подзадаче", State.DONE);

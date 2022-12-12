@@ -10,6 +10,7 @@ public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> tasks = new HashMap<>();
     private HistoryManager history = Managers.getDefaultHistory();
 
+
     @Override
     public void addTask(Task task) {
         task.setId(getNewId());
@@ -99,5 +100,27 @@ public class InMemoryTaskManager implements TaskManager {
     public void importTasks(Map<Integer, Task> tasks)
     {
         this.tasks = tasks;
+    }
+
+    @Override
+    public List<Task> getPrioritizedTasks()
+    {
+        List<Task> tasksList = getTasks();
+        Collections.sort(tasksList, (x, y) -> {
+            if(x.getStartTime() == null && y.getStartTime() == null)
+            {
+                return 0;
+            }
+            else if(x.getStartTime() == null)
+            {
+                return -1;
+            }
+            else if (y.getStartTime() == null)
+            {
+                return 1;
+            }
+            return x.getStartTime().compareTo(y.getStartTime());
+        });
+        return tasksList;
     }
 }

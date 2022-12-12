@@ -15,4 +15,6 @@ public interface TaskManager
     EpicTask getEpicTask(int id);
     List<Task> getTasks();
     List<Task> getHistory();
+    int getNewId();
+    List<Task> getPrioritizedTasks();
 }

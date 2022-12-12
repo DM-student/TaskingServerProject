@@ -3,6 +3,8 @@ package tasking.managers;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.io.File;
 
@@ -34,7 +36,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String inputString = stringBuilder.toString();
 
         // Отрицательное число заставляет метод вернуть строку, даже если после разделителя пустота.
-        String[] dataString = inputString.split("\n\n", - 1);
+        String[] dataString = inputString.split("\n\n", -1);
 
         String[] tasksStrings = dataString[0].split("\n");
 
@@ -49,19 +51,27 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 String name = taskStrings[2];
                 State state = State.valueOf(taskStrings[3]);
                 String description = taskStrings[4];
+                LocalDateTime startTime = (taskStrings[5].equals("") ? null : LocalDateTime.parse(taskStrings[5]));
+                Duration duration = (taskStrings[6].equals("") ? null : Duration.parse(taskStrings[6]));
 
                 if (type.equals("Task")) {
                     Task newTask = new Task(name, description, state);
                     newTask.setId(id);
+                    newTask.setStartTime(startTime);
+                    newTask.setDuration(duration);
                     tasks.put(id, newTask);
                 } else if (type.equals("EpicTask")) {
                     EpicTask newTask = new EpicTask(name);
                     newTask.setId(id);
+                    newTask.setStartTime(startTime);
+                    newTask.setDuration(duration);
                     tasks.put(id, newTask);
                 } else if (type.equals("SubTask")) {
-                    subtasksAndEpics.put(id, Integer.parseInt(taskStrings[5]));
+                    subtasksAndEpics.put(id, Integer.parseInt(taskStrings[7]));
                     Task newTask = new SubTask(name, description, state);
                     newTask.setId(id);
+                    newTask.setStartTime(startTime);
+                    newTask.setDuration(duration);
                     tasks.put(id, newTask);
                 }
             }
@@ -97,7 +107,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     {
         try(FileWriter writer = new FileWriter(saveFile, false))
         {
-            writer.write("id,type,name,status,description,owner");
+            writer.write("id,type,name,status,description,startTime,duration,owner");
 
             for(Task task : super.getTasks())
             {
@@ -115,12 +125,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 writer.write(",");
                 writer.write(task.getDescription() == null ? "" : task.getDescription());
                 writer.write(",");
+                writer.write(task.getStartTime() == null ? "" : task.getStartTime().toString());
+                writer.write(",");
+                writer.write(task.getDuration() == null ? "" : task.getDuration().toString());
+                writer.write(",");
                 if(task instanceof SubTask)
                 {
                     if(((SubTask) task).getOwner().getId() != null) {
                     writer.write(((SubTask) task).getOwner().getId().toString());
                     }
                 }
+
             }
 
             writer.write("\n");
