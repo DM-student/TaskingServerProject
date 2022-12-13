@@ -1,4 +1,4 @@
-package tasking.managers;
+package test;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,6 +6,7 @@ import tasking.Tasks.EpicTask;
 import tasking.Tasks.State;
 import tasking.Tasks.SubTask;
 import tasking.Tasks.Task;
+import tasking.managers.InMemoryTaskManager;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,7 +20,8 @@ class HistoryManagerTest {
     @BeforeEach
     void beforeEach()
     {
-        manager = new InMemoryTaskManager();
+        // Логично, что мне нужно тестировать историю в полноценных рабочих условиях.
+        manager.removeAllTasks();
 
         Task task1 = new Task("A", "AA", State.IN_PROGRESS);
         task1.setStartTime(LocalDateTime.of(2022, 10, 3, 13, 20));
@@ -71,13 +73,17 @@ class HistoryManagerTest {
     void testRemoveFromHistory()
     {
         manager.getDeveloperHistoryManager().removeFromHistory(1);
-        assertNotEquals(1, manager.getHistory().get(0).getId()); // Проверка добавления в историю и замену
-        // в случае если этот элемент есть в истории.
+        assertNotEquals(1, manager.getHistory().get(0).getId());
     }
     @Test
     void testClear()
     {
         manager.getDeveloperHistoryManager().clear();
         assertEquals(0, manager.getHistory().size());
+    }
+
+    public HistoryManagerTest()
+    {
+        manager = new InMemoryTaskManager();
     }
 }

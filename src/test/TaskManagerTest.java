@@ -1,5 +1,8 @@
-package tasking.managers;
+package test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import tasking.Tasks.*;
+import tasking.managers.TaskManager;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -11,6 +14,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     T manager;
 
     // Просто обнуление менеджера и подготовка его к новому тесту.
+
+    @BeforeEach
     void beforeEach()
     {
         manager.removeAllTasks();
@@ -44,6 +49,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.getSubTask(5);
     }
 
+    @Test
     void testPriorityList()
     {
         List<Task> testList = manager.getPrioritizedTasks();
@@ -54,6 +60,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(5, manager.getPrioritizedTasks().get(4).getId());
     }
 
+    @Test
     void testEpic()
     {
         assertEquals(3, manager.getSubTask(4).getOwner().getId());
@@ -62,13 +69,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(State.NEW, manager.getEpicTask(3).getState());
     }
 
+    @Test
     void testAddTask() // С пустым менеджером ничего не изменится.
     {
         Task newTask = new Task("test", "test-test", State.NEW);
         manager.addTask(newTask);
         assertEquals(newTask, manager.getTask(6));
     }
-
+    @Test
     void testGetMethods()
     {
         assertEquals("A", manager.getTask(1).getName());
@@ -79,6 +87,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNull(manager.getEpicTask(3));
         assertNull(manager.getSubTask(4));
     }
+    @Test
     void testRemove()
     {
         manager.removeTask(1);
@@ -86,18 +95,19 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.removeTask(1); // Тут идёт попытка удалить таск, который уже удалён.
         assertEquals(4, manager.getTasks().size()); // По итогу ничего не должно изменится.
     }
-    void testGetNewId()
-    {
-        assertEquals(6, manager.getNewId());
-        manager.removeAllTasks();
-        assertEquals(1, manager.getNewId());
-    }
+    @Test
     void testReplace()
     {
         manager.replaceTask(1, new Task("Test", "Test", State.NEW));
         assertEquals("Test", manager.getTask(1).getName());
         manager.replaceTask(10, new Task("Test", "Test", State.NEW));
         assertNull(manager.getTask(10));
+    }
+    @Test
+    void testRemoveAll()
+    {
+        manager.removeAllTasks();
+        assertEquals(0, manager.getTasks().size());
     }
     // Менеджер истории будет проверен отдельно.
 }

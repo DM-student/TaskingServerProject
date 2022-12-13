@@ -25,16 +25,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTasks() {
-        // Тут нужна подобная реализация, чтобы при удалении всего, оно было удалено и из истории.
-        List<Integer> toDelete = new ArrayList<>();
-        for(Task task : tasks.values())
-        {
-            toDelete.add(task.getId());
-        }
-        for(int id : toDelete)
-        {
-            removeTask(id);
-        }
+        history.clear();
+        tasks.clear();
     }
 
     @Override
@@ -88,7 +80,7 @@ public class InMemoryTaskManager implements TaskManager {
         return history;
     }
 
-    public int getNewId()
+    private int getNewId()
     {
         int id = 1;
         while (tasks.containsKey(id)) {
@@ -106,20 +98,20 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getPrioritizedTasks()
     {
         List<Task> tasksList = getTasks();
-        Collections.sort(tasksList, (x, y) -> {
-            if(x.getStartTime() == null && y.getStartTime() == null)
+        Collections.sort(tasksList, (task1, task2) -> {
+            if(task1.getStartTime() == null && task2.getStartTime() == null)
             {
                 return 0;
             }
-            else if(x.getStartTime() == null)
+            else if(task1.getStartTime() == null)
             {
                 return -1;
             }
-            else if (y.getStartTime() == null)
+            else if (task2.getStartTime() == null)
             {
                 return 1;
             }
-            return x.getStartTime().compareTo(y.getStartTime());
+            return task1.getStartTime().compareTo(task2.getStartTime());
         });
         return tasksList;
     }
