@@ -91,7 +91,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         if(dataString.length < 2 || dataString[1].isEmpty())
         {
-            return new FileBackedTasksManager(file);
+            return manager; // Исправил критический баг, который я не заметил и не пойми как допустил.
         }
         String[] historyStrings = dataString[1].split(",");
         manager.getDeveloperHistoryManager().clear();

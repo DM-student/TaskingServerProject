@@ -81,9 +81,19 @@ class HistoryManagerTest {
         manager.getDeveloperHistoryManager().clear();
         assertEquals(0, manager.getHistory().size());
     }
+    @Test
+    void testDuplicate()
+    {
+        manager.getDeveloperHistoryManager().clear();
+        manager.getDeveloperHistoryManager().addToHistory(manager.getTask(1)); // Два раза добавляем одну и ту же задачу.
+        manager.getDeveloperHistoryManager().addToHistory(manager.getTask(1));
+        assertEquals(1, manager.getHistory().size()); // Дублирования не случилось, задача была перезаписана в истории.
+    }
 
     public HistoryManagerTest()
     {
         manager = new InMemoryTaskManager();
     }
+
+
 }
