@@ -1,19 +1,23 @@
+import HTTPStuff.KVServer;
 import tasking.Tasks.EpicTask;
 import tasking.Tasks.State;
 import tasking.Tasks.SubTask;
 import tasking.Tasks.Task;
 import tasking.managers.FileBackedTasksManager;
+import tasking.managers.HTTPServerClientManager;
 import tasking.managers.Managers;
 import tasking.managers.TaskManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        KVServer KVServer1 = new KVServer();
+        KVServer1.start();
         TaskManager taskManager = Managers.loadFromFile(new File("save.txt"));
 
         for(int i = 0; i < 8; i++)
