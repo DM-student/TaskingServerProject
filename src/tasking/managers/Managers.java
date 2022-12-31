@@ -13,9 +13,19 @@ public class Managers {
     }
 
     public static FileBackedTasksManager loadFromFile(File file)
-    // Я не вижу смысла создавать аргумент для этого метода,
-    // так как всё равно предрешено название и путь файла для сохранения и загрузки.
     {
         return FileBackedTasksManager.load(file);
+    }
+
+    public static HTTPTaskManager loadFromKVServer(String URI, String key)
+    {
+        try
+        {
+            return new HTTPTaskManager(URI, key);
+        }
+        catch (Throwable e)
+        {
+            return null;
+        }
     }
 }

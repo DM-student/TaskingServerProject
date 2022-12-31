@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new KVServer().start();
-        TaskManager taskManager = new HTTPTaskManager("http://localhost:8078", "test");
+        TaskManager taskManager = Managers.loadFromKVServer("http://localhost:8078", "test");
 
         for(int i = 0; i < 8; i++)
         {
