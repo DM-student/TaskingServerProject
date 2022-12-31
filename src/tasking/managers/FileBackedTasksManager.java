@@ -9,12 +9,11 @@ import java.util.*;
 import java.io.File;
 
 import tasking.Tasks.*;
-import tasking.*;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    public File saveFile = new File("save.txt"); // Тут дефолтный путь сохранения, который можно изменить.
+    private File savePath = new File("save.txt"); // Тут дефолтный путь сохранения, который можно изменить.
 
     public static FileBackedTasksManager load(File file) { // Я считал, что лучше будет оставить
         Map<Integer, Task> tasks = new HashMap<>();
@@ -105,7 +104,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                         // а не аргумент, потому что иначе для изменения пути сохранения мне нужно будет менять путь
                         // в каждом вызове метода сохранения.
     {
-        try(FileWriter writer = new FileWriter(saveFile, false))
+        try(FileWriter writer = new FileWriter(savePath, false))
         {
             writer.write("id,type,name,status,description,startTime,duration,owner");
 
@@ -116,8 +115,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 writer.write("\n");
                 writer.write(task.getId() == null ? "" : task.getId().toString());
                 writer.write(",");
-                String[] classStrings = task.getClass().getName().split("\\.");
-                writer.write(classStrings[classStrings.length - 1]);
+                writer.write(task.getClass().getSimpleName());
                 writer.write(",");
                 writer.write(task.getName() == null ? "" : task.getName());
                 writer.write(",");
@@ -216,6 +214,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public FileBackedTasksManager(File file) {
-        saveFile = file;
+        savePath = file;
     }
 }

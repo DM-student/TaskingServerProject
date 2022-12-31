@@ -1,4 +1,4 @@
-package tasking.Tasks;
+package test;
 
 
 
@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import tasking.Tasks.EpicTask;
+import tasking.Tasks.State;
+import tasking.Tasks.SubTask;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

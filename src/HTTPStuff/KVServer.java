@@ -5,14 +5,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
-/**
- * Постман: https://www.getpostman.com/collections/a83b61d9e1c81c10575c
- */
+
 public class KVServer {
     public static final int PORT = 8078;
     private final String apiToken;
@@ -53,6 +52,10 @@ public class KVServer {
                 System.out.println("/load ждёт GET-запрос, а получил: " + h.getRequestMethod());
                 h.sendResponseHeaders(405, 0);
             }
+        } catch (Throwable t) {
+            System.out.println(t);
+            System.out.println(List.of(t.getStackTrace()));
+            h.sendResponseHeaders(500, 0);
         } finally {
             h.close();
         }
@@ -86,6 +89,11 @@ public class KVServer {
                 System.out.println("/save ждёт POST-запрос, а получил: " + h.getRequestMethod());
                 h.sendResponseHeaders(405, 0);
             }
+        }
+        catch (Throwable t) {
+            System.out.println(t);
+            System.out.println(List.of(t.getStackTrace()));
+            h.sendResponseHeaders(500, 0);
         } finally {
             h.close();
         }
