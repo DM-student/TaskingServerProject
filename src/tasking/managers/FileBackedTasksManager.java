@@ -119,7 +119,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 writer.write(",");
                 writer.write(task.getName() == null ? "" : task.getName());
                 writer.write(",");
-                writer.write(task.getState().name() == null ? "" : task.getState().name());
+                writer.write(task.getState().toString() == null ? "" : task.getState().toString());
                 writer.write(",");
                 writer.write(task.getDescription() == null ? "" : task.getDescription());
                 writer.write(",");
