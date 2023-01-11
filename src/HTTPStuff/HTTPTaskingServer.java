@@ -191,7 +191,7 @@ public class HTTPTaskingServer {
     void getHistory(HttpExchange h) throws IOException {
         try
         {
-            Object[] elements = taskManager.getTasks().stream().map(JsonTaskElement::taskToElement).toArray();
+            Object[] elements = taskManager.getHistory().stream().map(JsonTaskElement::taskToElement).toArray();
             String json = gson.toJson(elements);
             byte[] resp = json.getBytes(UTF_8);
             h.getResponseHeaders().add("Content-Type", "application/json");
